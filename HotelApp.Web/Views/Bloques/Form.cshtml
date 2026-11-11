@@ -1,0 +1,35 @@
+@model UpdateBloqueDto
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Nuevo bloque" : "Editar bloque";
+    var hoteles = (List<SelectListItem>)ViewBag.Hoteles;
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Guardar" method="post" class="col-md-7">
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label asp-for="HotelId" class="form-label">Hotel</label>
+        <select asp-for="HotelId" asp-items="hoteles" class="form-select">
+            <option value="0">-- Seleccione un hotel --</option>
+        </select>
+        <span asp-validation-for="HotelId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Nombre" class="form-label">Nombre</label>
+        <input asp-for="Nombre" class="form-control" />
+        <span asp-validation-for="Nombre" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Descripcion" class="form-label">Descripción</label>
+        <textarea asp-for="Descripcion" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Descripcion" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a class="btn btn-outline-secondary" asp-action="Index">Cancelar</a>
+</form>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

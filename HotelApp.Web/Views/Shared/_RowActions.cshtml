@@ -1,0 +1,19 @@
+@model RowActionsModel
+
+<div class="d-flex gap-1 justify-content-end">
+    <a class="btn btn-sm btn-outline-primary" asp-controller="@Model.Controller" asp-action="Edit" asp-route-id="@Model.Id">Editar</a>
+    @if (Model.Status)
+    {
+        <form asp-controller="@Model.Controller" asp-action="Desactivar" asp-route-id="@Model.Id" method="post"
+              onsubmit="return confirm('¿Desea desactivar este registro?');">
+            <button type="submit" class="btn btn-sm btn-outline-danger">Desactivar</button>
+        </form>
+    }
+    else
+    {
+        <form asp-controller="@Model.Controller" asp-action="Activar" asp-route-id="@Model.Id" method="post"
+              onsubmit="return confirm('¿Desea activar este registro?');">
+            <button type="submit" class="btn btn-sm btn-outline-success">Activar</button>
+        </form>
+    }
+</div>

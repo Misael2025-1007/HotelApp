@@ -1,0 +1,39 @@
+@model UpdatePisoDto
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Nuevo piso" : "Editar piso";
+    var hoteles = (List<SelectListItem>)ViewBag.Hoteles;
+    var bloques = (List<SelectListItem>)ViewBag.Bloques;
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Guardar" method="post" class="col-md-7">
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label asp-for="HotelId" class="form-label">Hotel</label>
+        <select asp-for="HotelId" asp-items="hoteles" class="form-select">
+            <option value="0">-- Seleccione un hotel --</option>
+        </select>
+        <span asp-validation-for="HotelId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="BloqueId" class="form-label">Bloque (opcional)</label>
+        <select asp-for="BloqueId" asp-items="bloques" class="form-select">
+            <option value="">-- Sin bloque --</option>
+        </select>
+        <div class="form-text">El bloque debe pertenecer al hotel seleccionado.</div>
+        <span asp-validation-for="BloqueId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Numero" class="form-label">Número de piso</label>
+        <input asp-for="Numero" type="number" min="0" max="200" class="form-control" />
+        <span asp-validation-for="Numero" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a class="btn btn-outline-secondary" asp-action="Index">Cancelar</a>
+</form>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

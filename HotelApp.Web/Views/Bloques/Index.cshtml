@@ -1,0 +1,33 @@
+@model List<BloqueDto>
+@{
+    ViewData["Title"] = "Bloques";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Gestión de bloques</h2>
+    <a class="btn btn-primary" asp-action="Create">Nuevo bloque</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+        <thead class="table-light">
+            <tr><th>Hotel</th><th>Nombre</th><th>Descripción</th><th>Estado</th><th></th></tr>
+        </thead>
+        <tbody>
+        @foreach (var b in Model)
+        {
+            <tr>
+                <td>@b.HotelNombre</td>
+                <td>@b.Nombre</td>
+                <td>@b.Descripcion</td>
+                <td><span class="badge @(b.Status ? "bg-success" : "bg-secondary")">@(b.Status ? "Activo" : "Inactivo")</span></td>
+                <td>@await Html.PartialAsync("_RowActions", new RowActionsModel(b.Id, b.Status, "Bloques"))</td>
+            </tr>
+        }
+        @if (!Model.Any())
+        {
+            <tr><td colspan="5" class="text-center text-muted">No hay bloques registrados.</td></tr>
+        }
+        </tbody>
+    </table>
+</div>
