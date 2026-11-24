@@ -1,0 +1,6 @@
+COPIAR SOBRE TU SOLUCION (en la rama de la API):
+  HotelApp.API  -> carpeta nueva dentro de HotelApp\
+  HotelApp.BL   -> reemplaza/agrega: Dtos\HabitacionDtos.cs, Services\IPisoService.cs, PisoService.cs,
+                   IHabitacionService.cs, HabitacionService.cs y DependencyInjection.cs
+  HotelApp.slnx -> reemplaza (agrega el proyecto API)
+Luego: Ctrl+Mayus+B, poner HotelApp.API como proyecto de inicio y F5 (abre /swagger).

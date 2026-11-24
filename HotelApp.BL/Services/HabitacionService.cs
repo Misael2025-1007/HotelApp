@@ -41,19 +41,7 @@ namespace HotelApp.BL.Services
                 if (habitacion == null)
                     return ServiceResult.Reject(_logger, "consultar habitación", "La habitación no existe.", id);
 
-                return ServiceResult.Ok(data: new HabitacionDto
-                {
-                    Id = habitacion.Id,
-                    PisoId = habitacion.PisoId,
-                    TipoHabitacionId = habitacion.TipoHabitacionId,
-                    Numero = habitacion.Numero,
-                    Capacidad = habitacion.Capacidad,
-                    Tarifa = habitacion.Tarifa,
-                    Estado = habitacion.Estado,
-                    Status = habitacion.Status,
-                    CreationDate = habitacion.CreationDate,
-                    ModifyDate = habitacion.ModifyDate
-                });
+                return ServiceResult.Ok(data: await DetalleAsync(id));
             }, _logger, "Ocurrió un error al obtener la habitación.");
 
         public Task<OperationResult> SaveAsync(SaveHabitacionDto dto) =>
@@ -76,7 +64,7 @@ namespace HotelApp.BL.Services
 
                 _logger.LogInformation("Habitación {HabitacionId} ({Numero}) registrada en el piso {PisoId}",
                     habitacion.Id, habitacion.Numero, habitacion.PisoId);
-                return ServiceResult.Ok("Habitación registrada correctamente.", habitacion.Id);
+                return ServiceResult.Ok("Habitación registrada correctamente.", await DetalleAsync(habitacion.Id));
             }, _logger, "Ocurrió un error al registrar la habitación.");
 
         public Task<OperationResult> UpdateAsync(UpdateHabitacionDto dto) =>
@@ -99,7 +87,7 @@ namespace HotelApp.BL.Services
                 await _habitacionRepo.UpdateAsync(habitacion);
 
                 _logger.LogInformation("Habitación {HabitacionId} actualizada", habitacion.Id);
-                return ServiceResult.Ok("Habitación actualizada correctamente.", habitacion.Id);
+                return ServiceResult.Ok("Habitación actualizada correctamente.", await DetalleAsync(habitacion.Id));
             }, _logger, "Ocurrió un error al actualizar la habitación.");
 
         public Task<OperationResult> RemoveAsync(RemoveDto dto) =>
@@ -180,6 +168,13 @@ namespace HotelApp.BL.Services
                     "Ya existe una habitación activa con ese número en el hotel.", excluirId);
 
             return null;
+        }
+
+        private async Task<HabitacionDto?> DetalleAsync(int id)
+        {
+            var todas = await _habitacionRepo.GetAllConDetalleAsync();
+            var h = todas.FirstOrDefault(x => x.Id == id);
+            return h == null ? null : ToDto(h);
         }
 
         private static HabitacionDto ToDto(Habitacion h) => new HabitacionDto

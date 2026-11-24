@@ -1,0 +1,88 @@
+@host = https://localhost:7200
+
+### ---------- TIPOS DE HABITACION ----------
+GET {{host}}/api/tipos-habitacion
+
+###
+POST {{host}}/api/tipos-habitacion
+Content-Type: application/json
+
+{ "nombre": "Presidencial", "descripcion": "Suite con terraza" }
+
+###
+PUT {{host}}/api/tipos-habitacion/1
+Content-Type: application/json
+
+{ "nombre": "Sencilla Plus", "descripcion": "Una cama individual" }
+
+###
+DELETE {{host}}/api/tipos-habitacion/1
+
+###
+PATCH {{host}}/api/tipos-habitacion/1/activar
+
+### ---------- HOTELES ----------
+GET {{host}}/api/hoteles
+
+###
+GET {{host}}/api/hoteles/1
+
+###
+POST {{host}}/api/hoteles
+Content-Type: application/json
+
+{ "nombre": "Hotel Plaza", "direccion": "Av. Winston Churchill #50", "telefono": "809-555-0200" }
+
+###
+PUT {{host}}/api/hoteles/1
+Content-Type: application/json
+
+{ "nombre": "Hotel Caribe", "direccion": "Av. George Washington #100", "telefono": "809-555-0101" }
+
+###
+DELETE {{host}}/api/hoteles/2
+
+###
+PATCH {{host}}/api/hoteles/2/activar
+
+### ---------- BLOQUES ----------
+GET {{host}}/api/bloques
+
+###
+POST {{host}}/api/bloques
+Content-Type: application/json
+
+{ "hotelId": 1, "nombre": "Bloque C", "descripcion": "Ala este" }
+
+### ---------- PISOS ----------
+GET {{host}}/api/pisos
+
+###
+POST {{host}}/api/pisos
+Content-Type: application/json
+
+{ "hotelId": 1, "bloqueId": 1, "numero": 4 }
+
+### Error esperado (400): piso repetido en el hotel (RN03)
+POST {{host}}/api/pisos
+Content-Type: application/json
+
+{ "hotelId": 1, "bloqueId": 1, "numero": 1 }
+
+### ---------- HABITACIONES ----------
+GET {{host}}/api/habitaciones
+
+###
+POST {{host}}/api/habitaciones
+Content-Type: application/json
+
+{ "pisoId": 1, "tipoHabitacionId": 1, "numero": "103", "capacidad": 2, "tarifa": 75.50, "estado": "Available" }
+
+### Error esperado (400): numero repetido en el hotel (RN05)
+POST {{host}}/api/habitaciones
+Content-Type: application/json
+
+{ "pisoId": 1, "tipoHabitacionId": 1, "numero": "101", "capacidad": 2, "tarifa": 75.50, "estado": "Available" }
+
+###
+PATCH {{host}}/api/habitaciones/1/activar

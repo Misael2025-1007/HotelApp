@@ -63,7 +63,7 @@ namespace HotelApp.BL.Services
 
                 _logger.LogInformation("Piso {PisoId} (número {Numero}) registrado en el hotel {HotelId}",
                     piso.Id, piso.Numero, piso.HotelId);
-                return ServiceResult.Ok("Piso registrado correctamente.", piso.Id);
+                return ServiceResult.Ok("Piso registrado correctamente.", await ToDtoAsync(piso));
             }, _logger, "Ocurrió un error al registrar el piso.");
 
         public Task<OperationResult> UpdateAsync(UpdatePisoDto dto) =>
@@ -87,7 +87,7 @@ namespace HotelApp.BL.Services
                 await _pisoRepo.UpdateAsync(piso);
 
                 _logger.LogInformation("Piso {PisoId} actualizado", piso.Id);
-                return ServiceResult.Ok("Piso actualizado correctamente.", piso.Id);
+                return ServiceResult.Ok("Piso actualizado correctamente.", await ToDtoAsync(piso));
             }, _logger, "Ocurrió un error al actualizar el piso.");
 
         public Task<OperationResult> RemoveAsync(RemoveDto dto) =>
@@ -167,6 +167,13 @@ namespace HotelApp.BL.Services
                     $"Ya existe un piso activo con el número {dto.Numero} en este hotel.", excluirId);
 
             return null;
+        }
+
+        private async Task<PisoDto> ToDtoAsync(Piso p)
+        {
+            var hotel = await _hotelRepo.GetByIdAsync(p.HotelId);
+            var bloque = p.BloqueId.HasValue ? await _bloqueRepo.GetByIdAsync(p.BloqueId.Value) : null;
+            return ToDto(p, hotel?.Nombre ?? string.Empty, bloque?.Nombre);
         }
 
         private static PisoDto ToDto(Piso p, string hotelNombre, string? bloqueNombre) => new PisoDto
